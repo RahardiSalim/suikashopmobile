@@ -1,4 +1,3 @@
-
 # Tugas 7: Elemen Dasar Flutter
 
 ## 1. Jelaskan apa yang dimaksud dengan stateless widget dan stateful widget, dan jelaskan perbedaan dari keduanya.
@@ -117,3 +116,234 @@
     ```bash
     flutter analyze
     ```
+
+# Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements
+
+## 1. Apa kegunaan `const` di Flutter? Jelaskan apa keuntungan ketika menggunakan `const` pada kode Flutter. Kapan sebaiknya kita menggunakan `const`, dan kapan sebaiknya tidak digunakan?
+
+`const` dalam Flutter memiliki beberapa kegunaan dan keuntungan penting:
+
+- Kegunaan:
+  - Menandai bahwa nilai suatu variabel bersifat konstan dan tidak akan berubah
+  - Mengoptimalkan performa aplikasi dengan mencegah pembuatan ulang widget yang tidak perlu
+  - Memastikan nilai sudah ditentukan pada saat kompilasi (compile-time)
+
+- Keuntungan:
+  - Meningkatkan performa aplikasi karena widget const hanya dibuat sekali
+  - Menghemat memori karena Flutter dapat menggunakan kembali instance yang sama
+  - Membantu mencegah kesalahan yang disebabkan perubahan nilai yang tidak diinginkan
+  
+- Kapan menggunakan `const`:
+  1. Untuk widget yang statis dan tidak berubah, contoh:
+     ```dart
+     const Text('Welcome to Suika Shop'),
+     const SizedBox(height: 10),
+     const Padding(padding: EdgeInsets.all(8.0))
+     ```
+  2. Untuk nilai yang sudah diketahui saat kompilasi:
+     ```dart
+     const double PI = 3.14159;
+     const List<String> CATEGORIES = ['Electronics', 'Fashion', 'Books'];
+     ```
+
+- Kapan tidak menggunakan `const`:
+  1. Untuk widget yang memerlukan data dinamis:
+     ```dart
+     Text(user.name),
+     Image.network(imageUrl)
+     ```
+  2. Untuk nilai yang ditentukan saat runtime:
+     ```dart
+     final now = DateTime.now();
+     final randomNumber = Random().nextInt(100);
+     ```
+
+## 2. Jelaskan dan bandingkan penggunaan Column dan Row pada Flutter. Berikan contoh implementasi dari masing-masing layout widget ini!
+
+Column dan Row adalah widget dasar untuk mengatur tata letak (layout) dalam Flutter:
+
+- Column:
+  - Mengatur widget secara vertikal (dari atas ke bawah)
+  - Cocok untuk membuat daftar vertikal atau form
+  
+Contoh implementasi Column dari kode saya:
+```dart
+Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        decoration: InputDecoration(
+          hintText: "Name",
+          labelText: "Name",
+          ...
+        ),
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        decoration: InputDecoration(
+          hintText: "Amount",
+          ...
+        ),
+      ),
+    ),
+    ...
+  ],
+)
+```
+
+- Row:
+  - Mengatur widget secara horizontal (dari kiri ke kanan)
+  - Cocok untuk membuat toolbar atau menu horizontal
+
+Contoh implementasi Row dari kode saya:
+```dart
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Icon(
+      item.icon,
+      color: Colors.white,
+      size: 30.0,
+    ),
+    Text(
+      item.name,
+      style: const TextStyle(color: Colors.white),
+    ),
+  ],
+)
+```
+
+## 3. Sebutkan apa saja elemen input yang kamu gunakan pada halaman form yang kamu buat pada tugas kali ini. Apakah terdapat elemen input Flutter lain yang tidak kamu gunakan pada tugas ini? Jelaskan!
+
+Elemen input yang saya gunakan:
+- TextFormField untuk nama item (input teks)
+- TextFormField untuk jumlah item (input angka)
+- TextFormField untuk deskripsi item (input teks multi-baris)
+
+Elemen input Flutter lain yang tidak digunakan:
+1. Checkbox
+   ```dart
+   Checkbox(
+     value: isChecked,
+     onChanged: (bool? value) {
+       setState(() {
+         isChecked = value!;
+       });
+     },
+   )
+   ```
+   
+2. Radio Button
+   ```dart
+   RadioListTile<String>(
+     title: const Text('Pilihan 1'),
+     value: 'pilihan1',
+     groupValue: selectedOption,
+     onChanged: (String? value) {
+       setState(() {
+         selectedOption = value!;
+       });
+     },
+   )
+   ```
+
+3. Dropdown
+   ```dart
+   DropdownButton<String>(
+     value: selectedValue,
+     items: <String>['A', 'B', 'C']
+         .map<DropdownMenuItem<String>>((String value) {
+       return DropdownMenuItem<String>(
+         value: value,
+         child: Text(value),
+       );
+     }).toList(),
+     onChanged: (String? newValue) {
+       setState(() {
+         selectedValue = newValue!;
+       });
+     },
+   )
+   ```
+
+4. DatePicker
+5. Slider
+6. Switch
+
+## 4. Bagaimana cara kamu mengatur tema (theme) dalam aplikasi Flutter agar aplikasi yang dibuat konsisten? Apakah kamu mengimplementasikan tema pada aplikasi yang kamu buat?
+
+Saya mengatur tema aplikasi dengan menggunakan ThemeData dalam MaterialApp. Berikut implementasinya:
+
+```dart
+MaterialApp(
+    title: 'Flutter Demo',
+    theme: ThemeData(
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.deepPurple,
+      ).copyWith(secondary: Colors.deepPurple[400]),
+      useMaterial3: true,
+    ),
+    ...
+)
+```
+
+Kemudian menggunakan tema tersebut secara konsisten di seluruh aplikasi dengan Theme.of(context):
+
+```dart
+appBar: AppBar(
+  backgroundColor: Theme.of(context).colorScheme.primary,
+  ...
+),
+```
+
+## 5. Bagaimana cara kamu menangani navigasi dalam aplikasi dengan banyak halaman pada Flutter?
+
+Saya menangani navigasi dalam aplikasi menggunakan beberapa metode:
+
+1. Navigasi ke halaman baru (push):
+```dart
+Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder: (context) => const ShopFormPage(),
+    ),
+);
+```
+
+2. Navigasi dengan mengganti halaman saat ini (pushReplacement):
+```dart
+Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (context) => MyHomePage(),
+    ),
+);
+```
+
+3. Menggunakan Drawer untuk navigasi menu:
+```dart
+drawer: Drawer(
+  child: ListView(
+    children: [
+      ListTile(
+        leading: const Icon(Icons.home_outlined),
+        title: const Text('Halaman Utama'),
+        onTap: () {
+          Navigator.pushReplacement(...);
+        },
+      ),
+      ListTile(
+        leading: const Icon(Icons.add_shopping_cart),
+        title: const Text('Tambah Produk'),
+        onTap: () {
+          Navigator.pushReplacement(...);
+        },
+      ),
+    ],
+  ),
+),
+```
