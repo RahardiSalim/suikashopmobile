@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suikashop/screens/menu.dart';
-import 'package:suikashop/screens/shop_form.dart';
+import 'package:suikashop/screens/product_form.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -56,7 +56,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ShopFormPage(),
+                    builder: (context) => const ProductEntryForm(),
                   ));
             },
           ),
